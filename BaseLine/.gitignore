@@ -1,0 +1,66 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+.venv
+
+# Conda
+.conda/
+
+# Data
+data/
+*.zip
+*.tar.gz
+*.tar
+
+# Model checkpoints
+saves/
+checkpoints/
+*.pt
+*.pth
+*.bin
+*.safetensors
+
+# Logs
+logs/
+lightning_logs/
+tensorboard_logs/
+*.log
+
+# Jupyter
+.ipynb_checkpoints/
+*.ipynb_checkpoints
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*.sublime-project
+*.sublime-workspace
+
+# OS
+.DS_Store
+Thumbs.db
+.directory
+
+# LLaMA-Factory (sẽ clone trên Kaggle)
+train/LLaMA-Factory/
+
+# Temporary files
+*.tmp
+*.temp
+activate_env.sh
+check_gpu.sh
+
+# Hugging Face cache
+.cache/
+huggingface/
+
+# Weights & Biases
+wandb/
