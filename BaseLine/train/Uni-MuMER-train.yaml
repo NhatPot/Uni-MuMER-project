@@ -16,7 +16,8 @@ deepspeed: examples/deepspeed/ds_z2_config.json
 
 ### dataset
 # You need load the datasets first before using them, following LLamaFactory settings.
-dataset: crohme2023, crohme2023_can, crohme2023_error_find, crohme2023_error_fix, crohme2023_tree, crohme_train, crohme_train_can, crohme_train_error_find, crohme_train_error_fix, crohme_train_tree, hme100k_error_find, hme100k_error_fix, hme100k_train, hme100k_train_can, hme100k_train_tree, im2latex_v2_error_find, im2latex_v2_error_fix, im2latex_v2_train, im2latex_v2_train_can, im2latex_v2_train_tree, mathwriting_symbols, mathwriting_train, mathwriting_train_can, mathwriting_train_error_find, mathwriting_train_error_fix, mathwriting_train_tree
+dataset_dir: ../../data
+dataset: crohme_2014, crohme_2016, crohme_2019, crohme2023_test, crohme2023_val, hme100k_test, im2latexv2_test, im2latexv2_valid, mathwriting_test, mathwriting_val, mne_n1, mne_n2, mne_n3
 
 template: qwen2_vl
 cutoff_len: 2048
