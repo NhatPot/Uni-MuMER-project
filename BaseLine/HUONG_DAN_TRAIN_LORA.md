@@ -1,15 +1,18 @@
-# Hướng dẫn Training với LoRA
+# Hướng dẫn Training với LoRA + Quantization 4-bit
 
 ## ✅ Đã cấu hình xong!
 
-Config đã được chuyển từ **Full Fine-tuning** sang **LoRA** để tiết kiệm memory cho GPU 8GB.
+Config đã được chuyển từ **Full Fine-tuning** sang **LoRA + Quantization 4-bit** để tiết kiệm memory tối đa cho GPU 8GB.
 
 ## 📊 So sánh
 
 | Phương pháp | Memory cần | Tham số train |
 |------------|------------|---------------|
 | Full Fine-tuning | ~25GB | 100% (3B params) |
-| **LoRA** | **~8-10GB** | **~1-2% (vài triệu params)** |
+| LoRA | ~8-10GB | ~1-2% (vài triệu params) |
+| **LoRA + 4-bit Quantization** | **~4-6GB** | **~1-2% (vài triệu params)** ✅ |
+
+**Quantization 4-bit** giảm model từ 6-7GB xuống ~3-4GB khi load!
 
 ## 🚀 Cách chạy
 
@@ -43,11 +46,15 @@ llamafactory-cli train ../Uni-MuMER-train-local.yaml
 ## 📝 Các thay đổi đã thực hiện
 
 1. ✅ `finetuning_type: lora` - Chuyển sang LoRA
-2. ✅ `lora_rank: 16` - Rank của LoRA adapter
-3. ✅ `lora_alpha: 32` - Scaling factor
-4. ✅ `per_device_train_batch_size: 2` - Tăng batch size (LoRA tiết kiệm memory)
-5. ✅ `learning_rate: 5.0e-4` - Tăng LR cho LoRA (thường cao hơn full fine-tuning)
-6. ✅ `image_max_pixels: 131072` - Tăng lại vì LoRA tiết kiệm memory
+2. ✅ `quantization_bit: 4` - **QUAN TRỌNG**: Quantization 4-bit để giảm memory khi load model
+3. ✅ `quantization_method: bnb` - Sử dụng BitsAndBytes
+4. ✅ `double_quantization: true` - Tiết kiệm thêm memory
+5. ✅ `lora_rank: 16` - Rank của LoRA adapter
+6. ✅ `lora_alpha: 32` - Scaling factor
+7. ✅ `per_device_train_batch_size: 1` - Giữ = 1 để an toàn
+8. ✅ `learning_rate: 5.0e-4` - Tăng LR cho LoRA (thường cao hơn full fine-tuning)
+9. ✅ `image_max_pixels: 65536` - Giảm để đảm bảo đủ memory
+10. ✅ Đã cài `bitsandbytes` package
 
 ## 📂 Output
 
