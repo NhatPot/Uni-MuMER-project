@@ -17,6 +17,7 @@ deepspeed: examples/deepspeed/ds_z2_config.json
 ### dataset
 # You need load the datasets first before using them, following LLamaFactory settings.
 dataset_dir: ../../data
+media_dir: ..
 dataset: crohme_2014, crohme_2016, crohme_2019, crohme2023_test, crohme2023_val, hme100k_test, im2latexv2_test, im2latexv2_valid, mathwriting_test, mathwriting_val, mne_n1, mne_n2, mne_n3
 
 template: qwen2_vl

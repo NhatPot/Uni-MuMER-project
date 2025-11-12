@@ -81,14 +81,17 @@ echo "=========================================="
 echo "Bắt đầu training..."
 echo "=========================================="
 echo "Config file: ${CONFIG_FILE}"
-echo "Output directory: saves/qwen2.5_vl-3b/full/sft/standred/uni-mumer_local"
+echo "Output directory: saves/qwen2.5_vl-3b/lora/sft/standred/uni-mumer_local"
+echo "Method: LoRA (Low-Rank Adaptation) - Tiết kiệm memory hơn full fine-tuning"
 echo ""
 
 # Di chuyển vào thư mục LLaMA-Factory và chạy training
 cd train/LLaMA-Factory
 
-# Chạy training
+# Chạy training với tối ưu memory
 echo -e "${GREEN}Đang chạy training...${NC}"
+# Set biến môi trường để tối ưu CUDA memory allocation
+export PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True
 llamafactory-cli train ../Uni-MuMER-train-local.yaml
 
 echo ""
@@ -96,7 +99,7 @@ echo "=========================================="
 echo -e "${GREEN}Training hoàn tất!${NC}"
 echo "=========================================="
 echo ""
-echo "Checkpoints được lưu tại: saves/qwen2.5_vl-3b/full/sft/standred/uni-mumer_local"
+echo "Checkpoints được lưu tại: saves/qwen2.5_vl-3b/lora/sft/standred/uni-mumer_local"
 echo ""
 echo "Để tiếp tục train trên Kaggle, push code lên GitHub và sử dụng notebook UniMER_Kaggle_Setup.ipynb"
 echo ""
