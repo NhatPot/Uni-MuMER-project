@@ -1,8 +1,8 @@
 ### model
 model_name_or_path: Qwen/Qwen2.5-VL-3B-Instruct
 
-# Giảm image_max_pixels để đảm bảo đủ memory với quantization
-image_max_pixels: 65536  # Giảm để an toàn với GPU 8GB
+# TỐI ƯU TỐC ĐỘ: Giảm image_max_pixels để tăng tốc độ xử lý (vẫn đủ chất lượng)
+image_max_pixels: 32768  # Giảm từ 65536 để tăng tốc độ, vẫn đủ để nhận diện công thức toán
 video_max_pixels: 16384
 trust_remote_code: true
 # Tối ưu memory khi load model
@@ -33,39 +33,41 @@ freeze_language_model: false
 # Bạn cần giải nén đầy đủ thư mục data/ trước khi sử dụng.
 dataset_dir: ../../data
 media_dir: ..
-# Danh sách dataset khớp với các file prompt hiện có trong data/
-dataset: crohme_2014, crohme_2016, crohme_2019, crohme2023_test, crohme2023_val, hme100k_test, im2latexv2_test, im2latexv2_valid, mathwriting_test, mathwriting_val, mne_n1, mne_n2, mne_n3
-
-# Nếu bạn tải thêm các biến thể dataset khác (ví dụ *_normalized) hãy thêm tên dataset tương ứng vào dòng trên.
+# TỐI ƯU: Chỉ train với CROHME 2014 (986 samples) để đạt 100 epoch trong 8 giờ
+# Với 986 samples, batch_size=2, grad_accum=8: ~62 steps/epoch
+# 100 epochs = 6,200 steps → cần ~4.6 giây/step (khả thi với quantization)
+dataset: crohme_2014
 
 template: qwen2_vl
 cutoff_len: 2048
 max_samples: 20000000
 overwrite_cache: true
-# Giảm số workers để tiết kiệm memory
-preprocessing_num_workers: 4
-dataloader_num_workers: 2
+# TỐI ƯU: Giảm workers để giảm overhead và tăng tốc độ
+preprocessing_num_workers: 2  # Giảm từ 4 xuống 2
+dataloader_num_workers: 1  # Giảm từ 2 xuống 1
 
 ### output
-output_dir: saves/qwen2.5_vl-3b/lora/sft/standred/uni-mumer_local
+output_dir: saves/qwen2.5_vl-3b/lora/sft/standred/uni-mumer_crohme_100epoch
 logging_steps: 10
-save_steps: 500
+save_steps: 200  # Giảm từ 500 xuống 200 để save thường xuyên hơn (mỗi ~3.2 epoch)
 plot_loss: true
 overwrite_output_dir: true
 report_to: tensorboard
 
 ### train
-# Giữ batch size = 1 để đảm bảo đủ memory với quantization
-per_device_train_batch_size: 1  # Giữ = 1 để an toàn
-# Tăng gradient accumulation để giữ effective batch size
-gradient_accumulation_steps: 16  # effective batch size = 1 * 16 = 16
+# TỐI ƯU: Tăng batch size lên 2 (với quantization 4-bit có thể làm được)
+# Giảm gradient accumulation để tăng tốc độ
+per_device_train_batch_size: 2  # Tăng từ 1 lên 2 (với quantization vẫn an toàn)
+gradient_accumulation_steps: 8  # Giảm từ 16 xuống 8 (effective batch = 2 * 8 = 16, vẫn giữ chất lượng)
 # Bật gradient checkpointing để tiết kiệm memory
 gradient_checkpointing: true
 
 # LoRA thường dùng learning rate cao hơn full fine-tuning
-learning_rate: 5.0e-4  # Tăng từ 1e-5 lên 5e-4 cho LoRA
-# Train vài epoch trên local
-num_train_epochs: 2.0
+learning_rate: 5.0e-4  # Giữ nguyên cho LoRA
+# TỐI ƯU: Train 100 epoch trong 8 giờ
+# Với 986 samples, batch_size=2, grad_accum=8: ~62 steps/epoch
+# 100 epochs = 6,200 steps → cần ~4.6 giây/step (khả thi!)
+num_train_epochs: 100.0
 lr_scheduler_type: cosine
 warmup_ratio: 0.1
 bf16: true
