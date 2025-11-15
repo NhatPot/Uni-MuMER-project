@@ -5,8 +5,8 @@ model_name_or_path: Qwen/Qwen2.5-VL-3B-Instruct
 image_max_pixels: 32768  # Giảm từ 65536 để tăng tốc độ, vẫn đủ để nhận diện công thức toán
 video_max_pixels: 16384
 trust_remote_code: true
-# Tối ưu memory khi load model
-low_cpu_mem_usage: true
+# Kaggle có nhiều RAM hơn, không cần low_cpu_mem_usage
+low_cpu_mem_usage: false
 
 ### method
 stage: sft
@@ -18,7 +18,8 @@ lora_target: all  # Train trên tất cả các layer có thể
 lora_rank: 8  # Giảm từ 16 xuống 8 để tăng tốc độ (giảm ~50% tham số train)
 lora_alpha: 16  # Scaling factor = 2 * rank (giảm từ 32 xuống 16)
 lora_dropout: 0.05  # Dropout để tránh overfitting
-# Quantization 4-bit để giảm memory khi load model (QUAN TRỌNG cho GPU 8GB!)
+# Kaggle T4 có 16GB VRAM, có thể không cần quantization hoặc dùng 8-bit
+# Nhưng để an toàn và tăng tốc độ, vẫn dùng 4-bit
 quantization_bit: 4
 quantization_method: bnb
 double_quantization: true  # Tiết kiệm thêm memory
@@ -26,8 +27,6 @@ double_quantization: true  # Tiết kiệm thêm memory
 freeze_vision_tower: false
 freeze_multi_modal_projector: false
 freeze_language_model: false
-# Tắt deepspeed cho local training với RTX 3070 (8GB VRAM)
-# deepspeed: examples/deepspeed/ds_z2_config.json
 
 ### dataset
 # Bạn cần giải nén đầy đủ thư mục data/ trước khi sử dụng.
@@ -47,28 +46,28 @@ preprocessing_num_workers: 2  # Giảm từ 4 xuống 2
 dataloader_num_workers: 1  # Giảm từ 2 xuống 1
 
 ### output
-output_dir: saves/qwen2.5_vl-3b/lora/sft/standred/uni-mumer_crohme_local
+output_dir: saves/qwen2.5_vl-3b/lora/sft/standred/uni-mumer_crohme_kaggle
 logging_steps: 10
-save_steps: 200  # Giảm từ 500 xuống 200 để save thường xuyên hơn
+save_steps: 200  # Giảm từ 500 xuống 200 để save thường xuyên hơn (mỗi ~3.2 epoch)
 plot_loss: true
 overwrite_output_dir: true
 report_to: tensorboard
 
 ### train
-# LOCAL RTX 3070 (8GB): Tối ưu memory, có thể tăng batch size nếu còn VRAM
-# TỐI ƯU: Tăng batch size lên 2 (với quantization 4-bit có thể làm được)
+# KAGGLE: 2 GPU T4 (16GB mỗi GPU) - có thể tăng batch size
+# Với 2 GPU, batch size sẽ được nhân đôi tự động
+per_device_train_batch_size: 4  # 4 per GPU × 2 GPU = 8 total
 # Giảm gradient accumulation để tăng tốc độ
-per_device_train_batch_size: 2  # Tăng từ 1 lên 2 (với quantization vẫn an toàn)
-gradient_accumulation_steps: 8  # Giảm từ 16 xuống 8 (effective batch = 2 * 8 = 16, vẫn giữ chất lượng)
+gradient_accumulation_steps: 4  # effective batch size = 4 * 2 * 4 = 32
 # Bật gradient checkpointing để tiết kiệm memory
 gradient_checkpointing: true
 
 # LoRA thường dùng learning rate cao hơn full fine-tuning
 learning_rate: 5.0e-4  # Giữ nguyên cho LoRA
-# LOCAL: Train vài epoch để test chất lượng và khả năng học của mô hình
-# Với 3332 samples, batch_size=2, grad_accum=8: ~208 steps/epoch
-# 5 epochs = 1,040 steps → khoảng 30-60 phút (đủ để test)
-num_train_epochs: 5.0  # Tăng từ 2 lên 5 để test tốt hơn
+# TỐI ƯU: Train 100 epoch trong 8 giờ
+# Với 3332 samples, batch_size=4×2 GPU, grad_accum=4: ~104 steps/epoch
+# 100 epochs = 10,400 steps → cần ~2.77 giây/step (khả thi với T4!)
+num_train_epochs: 100.0
 lr_scheduler_type: cosine
 warmup_ratio: 0.1
 bf16: true
@@ -78,6 +77,9 @@ resume_from_checkpoint: null
 # Tối ưu memory
 max_grad_norm: 1.0
 optim: adamw_torch
+
+# Multi-GPU training
+ddp_find_unused_parameters: false  # Tăng tốc độ DDP
 
 # no need to eval during training
 ### eval
