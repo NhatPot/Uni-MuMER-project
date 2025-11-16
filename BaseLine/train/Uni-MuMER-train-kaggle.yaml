@@ -27,6 +27,8 @@ double_quantization: true  # Tiết kiệm thêm memory
 freeze_vision_tower: false
 freeze_multi_modal_projector: false
 freeze_language_model: false
+# Bật HMER accuracy để hiển thị Exact Match Rate trong terminal
+compute_hmer_accuracy: true  # Hiển thị accuracy (Exact Match Rate) trực tiếp trong logs
 
 ### dataset
 # Bạn cần giải nén đầy đủ thư mục data/ trước khi sử dụng.
@@ -48,10 +50,15 @@ dataloader_num_workers: 1  # Giảm từ 2 xuống 1
 ### output
 output_dir: saves/qwen2.5_vl-3b/lora/sft/standred/uni-mumer_crohme_kaggle
 logging_steps: 10
-save_steps: 200  # Giảm từ 500 xuống 200 để save thường xuyên hơn (mỗi ~3.2 epoch)
+# Lưu checkpoint sau mỗi epoch để có thể so sánh kết quả
+save_strategy: epoch  # Lưu sau mỗi epoch
+save_steps: null  # Không dùng khi save_strategy = epoch
 plot_loss: true
 overwrite_output_dir: true
 report_to: tensorboard
+# Lưu kết quả evaluation vào file JSON
+load_best_model_at_end: false  # Không load best model, giữ tất cả checkpoints
+metric_for_best_model: eval_loss  # Metric để chọn best model
 
 ### train
 # KAGGLE: 2 GPU T4 (16GB mỗi GPU) - có thể tăng batch size
@@ -81,11 +88,15 @@ optim: adamw_torch
 # Multi-GPU training
 ddp_find_unused_parameters: false  # Tăng tốc độ DDP
 
-# no need to eval during training
 ### eval
-# eval_dataset: crohme_2014,crohme_2016,crohme_2019
-# val_size: 0
-# per_device_eval_batch_size: 8
-# eval_strategy: steps
-# eval_steps: 1000
+# Bật evaluation để theo dõi accuracy và chất lượng mô hình
+do_eval: true
+# Tách 10% training data làm validation set
+val_size: 0.1  # 10% của training data (~333 samples)
+per_device_eval_batch_size: 8  # Batch size cho evaluation (có thể lớn hơn train)
+# Đánh giá sau mỗi epoch để lưu kết quả và so sánh
+eval_strategy: epoch  # Đánh giá sau mỗi epoch
+eval_steps: null  # Không dùng khi eval_strategy = epoch
+# Metric: eval_loss, eval_perplexity sẽ được lưu trong mỗi checkpoint
+# Kết quả được lưu tại: output_dir/trainer_state.json và mỗi checkpoint/eval_results.json
 

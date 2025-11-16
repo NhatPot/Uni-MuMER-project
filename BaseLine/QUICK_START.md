@@ -2,6 +2,9 @@
 
 Hướng dẫn nhanh để train Uni-MuMER trên máy local (RTX 3070) và tiếp tục trên Kaggle.
 
+> 📚 **Xem hướng dẫn chi tiết**: `HUONG_DAN_TRAIN.md`  
+> 📊 **Xem hướng dẫn accuracy**: `HUONG_DAN_ACCURACY.md`
+
 ## 📋 Bước 1: Setup Môi Trường (Local)
 
 ```bash
