@@ -45,7 +45,7 @@ pip list
 
 ### Cách 1: Tự Động (Khuyến nghị)
 ```bash
-cd "/home/nhat/Uni-MuMER-project/BaseLine"
+cd "/home/nhat/Uni-MuMER-project/src_author"
 bash setup_conda_step_by_step.sh
 ```
 
@@ -90,7 +90,7 @@ python -c "import torch; print('CUDA:', torch.cuda.is_available()); print('GPU:'
 ### Bắt đầu làm việc:
 ```bash
 conda activate unimumer
-cd "/home/nhat/Uni-MuMER-project/BaseLine"
+cd "/home/nhat/Uni-MuMER-project/src_author"
 ```
 
 ### Chạy code:

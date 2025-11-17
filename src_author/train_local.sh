@@ -68,7 +68,7 @@ fi
 # Kiểm tra dữ liệu
 if [ ! -d "data" ]; then
     echo -e "${YELLOW}Cảnh báo: Không tìm thấy thư mục data/${NC}"
-    echo "Vui lòng giải nén data.zip vào thư mục BaseLine/"
+    echo "Vui lòng giải nén data.zip vào thư mục src_author/"
     read -p "Bạn có muốn tiếp tục không? (y/n): " -n 1 -r
     echo
     if [[ ! $REPLY =~ ^[Yy]$ ]]; then

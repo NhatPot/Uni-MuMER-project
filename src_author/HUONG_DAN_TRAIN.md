@@ -29,7 +29,7 @@ Hướng dẫn chi tiết để train mô hình Uni-MuMER trên máy local và K
 ### Cách 1: Tự động (Khuyến nghị)
 
 ```bash
-cd "/home/nhat/Uni-MuMER-project/BaseLine"
+cd "/home/nhat/Uni-MuMER-project/src_author"
 bash setup_conda_local.sh
 ```
 
@@ -49,7 +49,7 @@ Xem `CONDA_COMMANDS.md` để biết các lệnh conda chi tiết.
 
 1. **Giải nén dữ liệu**:
    ```bash
-   cd "/home/nhat/Uni-MuMER-project/BaseLine"
+   cd "/home/nhat/Uni-MuMER-project/src_author"
    unzip data.zip -d .
    ```
 
@@ -91,7 +91,7 @@ File `train/Uni-MuMER-train-local.yaml`:
 ### Chạy Training
 
 ```bash
-cd "/home/nhat/Uni-MuMER-project/BaseLine"
+cd "/home/nhat/Uni-MuMER-project/src_author"
 conda activate unimumer
 bash train_local.sh
 ```

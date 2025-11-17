@@ -108,7 +108,7 @@ Hiển thị kết quả đẹp mắt sau mỗi epoch:
 ```bash
 # 1. Clone repository
 git clone https://github.com/YOUR_USERNAME/Uni-MuMER-project.git
-cd Uni-MuMER-project/BaseLine
+cd Uni-MuMER-project/src_author
 
 # 2. Setup môi trường
 bash setup_conda_local.sh
@@ -201,7 +201,7 @@ python scripts/calculate_accuracy.py saves/.../checkpoint-400
 ## 🔧 Cấu Trúc Project
 
 ```
-BaseLine/
+src_author/
 ├── train/
 │   ├── Uni-MuMER-train-local.yaml    # Config cho RTX 3070
 │   ├── Uni-MuMER-train-kaggle.yaml  # Config cho Kaggle 2x T4
@@ -257,4 +257,5 @@ Apache-2.0 License (giống repository gốc)
 **📧 Liên hệ**: [Email của bạn]
 
 **🔗 Repository gốc**: https://github.com/BFlameSwift/Uni-MuMER
+
 

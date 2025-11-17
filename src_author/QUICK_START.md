@@ -8,7 +8,7 @@ Hướng dẫn nhanh để train Uni-MuMER trên máy local (RTX 3070) và tiế
 ## 📋 Bước 1: Setup Môi Trường (Local)
 
 ```bash
-cd "/home/nhat/Uni-MuMER-project/BaseLine"
+cd "/home/nhat/Uni-MuMER-project/src_author"
 bash setup_conda_local.sh
 ```
 

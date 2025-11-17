@@ -100,7 +100,7 @@ cat saves/.../checkpoint-1/eval_results.json | python -m json.tool
 ### Tổng hợp tất cả epochs
 
 ```bash
-cd /home/nhat/Uni-MuMER-project/BaseLine
+cd /home/nhat/Uni-MuMER-project/src_author
 conda activate unimumer
 
 # Tổng hợp kết quả
@@ -133,7 +133,7 @@ Eval Loss: 0.028000
 ### Sử dụng script
 
 ```bash
-cd /home/nhat/Uni-MuMER-project/BaseLine
+cd /home/nhat/Uni-MuMER-project/src_author
 conda activate unimumer
 
 # Tính accuracy từ checkpoint
